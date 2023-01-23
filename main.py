@@ -78,37 +78,48 @@ frames = ['''
 word_list = ["aguascalientes", "bajacalifornia", "campeche", "chiapas", "chihuahua", "mexico", "coahuila", "colima", "durango", "guanajuato", "guerrero", "hidalgo", "jalisco", "michoacan", "morelos", "nayarit", "nuevoleon", "puebla", "sinaloa", "queretaro", "oaxaca", "sanluispotosi", "sonora", "tabasco", "tamaulipas", "tlaxcala", "veracruz", "yucatan", "zacatecas" ]
 
 chosen_word = random.choice(word_list)
-#display de rayas 
+
+# Display de rayas 
+box = ["_" for letter in chosen_word]
+
+# Game variable setup
 lives = 6
-box = []
-for letter in chosen_word:
-  box += "_"
-print(box)
+used_letters = []
 end_game = False
-#que se continue ejecutando el juego
-while end_game == False:
-  guess = input("Guess a letter / Adivina una letra: \n").lower()
-  clear()
-#comprobar la letra si adivinar cambiar posicion guiones
-  for position in range(len(chosen_word)):
-    letter = chosen_word[position]
-    if letter == guess:
-      box[position] = letter
-      print("Has Adivinado / You have guessed")
-  
-  if guess not in chosen_word:
-    lives -= 1
-    print(f"No has Adivinado, pierdes una vida / you haven't guessed, you lose a life \n Tus Vidas: {lives}")
-    if lives == 0:
-      print("Has Perdido! / You loose! :C")
-      end_game = True
-   
-  print(box)
-#comprobar que no hayan espacios para ganar  
-  if "_" not in box:
-    print("Has Ganado!!! / You Win !!!")
-    end_game = True
-  
-  print(frames[lives])
+
+# Que se continue ejecutando el juego
+while not end_game:
+    # Display current word
+    print(" ".join(box))
+    
+    # Ask to guess a letter
+    guess = input("Guess a letter / Adivina una letra: \n").lower()
+    
+    # Check if the letter hasn't been used yet
+    if guess in used_letters:
+        print("You already used this letter / Ya utilizaste esta letra")
+        continue
+    used_letters.append(guess)
+    
+    # Comprobar la letra si adivinar cambiar posicion guiones
+    if guess in chosen_word:
+        for position, letter in enumerate(chosen_word):
+            if letter == guess:
+                box[position] = letter
+                print("Has Adivinado / You have guessed")
+    else:
+        # Reduce lives count by 1
+        lives -= 1
+        print(f"No has Adivinado, pierdes una vida / you haven't guessed, you lose a life \n Tus Vidas: {lives}")
+        if lives == 0:
+            print("Has Perdido! / You loose! :C")
+            end_game = True
+    
+    # Comprobar que no hayan espacios para ganar  
+    if "_" not in box:
+        print("Has Ganado!!! / You Win !!!")
+        end_game = True
+
+    print(frames[lives])
 
 print("✄ - - - - - - - - - - - - - - - - - - - -")
